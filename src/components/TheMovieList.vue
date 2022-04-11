@@ -3,7 +3,6 @@
         <div v-for="movie in list" :key="movie.id">
             <the-movie-card :movieId="movie.id"/>
         </div>
-        <div></div>
     </div>
 </template>
 
@@ -20,7 +19,26 @@ export default({
         }
     },
     methods:{
-        
+        getMoreMovie(){
+            server(this.getSort).then(data => {
+                if(data.length > 10){
+                    let newList = data.results.slice(this.list.length, this.list.length+10);
+                    for(let i=0; i<newList.length; i++){
+                        this.list.push(newList[i]);
+                    }
+                }else{
+                    let newList = this.list.slice(0, 10);
+                    for(let i=0; i<newList.length; i++){
+                        this.list.push(newList[i]);
+                    }
+                }
+            })
+        },
+        scrollHandler(){
+            if(window.scrollY + window.innerHeight >= document.body.scrollHeight){
+                this.getMoreMovie();
+            }
+        }
     },
     computed: {
         ...mapGetters({
@@ -32,7 +50,7 @@ export default({
             handler(newVal, oldVal) {
                 if(newVal != oldVal){
                     server(this.getSort).then(data => {
-                        this.list = data.results.slice(0, 20);
+                        this.list = data.results.slice(0, 10);
                     })
                 }
             },
@@ -41,8 +59,9 @@ export default({
     },
     mounted() {
         server(this.getSort).then(data => {
-            this.list = data.results.slice(0, 20);
-        })
+            this.list = data.results.slice(0, 10);
+        });
+        window.addEventListener('scroll', this.scrollHandler);
     },
 })
 </script>
@@ -52,12 +71,17 @@ export default({
     width: 60%;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     justify-content: center;
     margin: auto;
 
     &>div{
         padding: 20px 30px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .list{
+        width: 100%;
     }
 }
 </style>

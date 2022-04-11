@@ -1,17 +1,22 @@
 <template>
   <div class="container">
-    <div class="btn" @click="setSort('popular')">Популярные</div>
-    <div class="btn" @click="setSort('top_rated')">C наивысшим рейтингом</div>
-    <div class="btn" @click="setSort('upcoming')">Скоро выход</div>
+    <div class="btn" @click="setSort('popular')" :class="{active: getSort=='popular'}">Популярные</div>
+    <div class="btn" @click="setSort('top_rated')" :class="{active: getSort=='top_rated'}">C наивысшим рейтингом</div>
+    <div class="btn" @click="setSort('upcoming')" :class="{active: getSort=='upcoming'}">Скоро выход</div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
     methods:{ 
         ...mapActions(['setSort'])
-    }
+    },
+    computed: {
+        ...mapGetters({
+            getSort: 'getSort',
+        }),
+    },
 }
 </script>
 
@@ -26,6 +31,9 @@ export default {
         cursor: pointer;
         color: #bfe3ca;
     }
+    &.active{
+        color: #29e060;
+    }
 }
 .container{
     display: flex;
@@ -34,5 +42,11 @@ export default {
     gap: 20px;
     padding: 10px 0;
     background-color: #081c22;
+}
+
+@media (max-width: 768px) {
+    .container{
+        flex-direction: column;
+    }
 }
 </style>

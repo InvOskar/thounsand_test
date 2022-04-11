@@ -2,8 +2,7 @@
     <div class="container">
         <div class="score_bar">
             <svg class="progres" width="70px" height="70px" fill="#081c22">
-                <circle class="progres_circle" cx="35" cy="35" r="28" stroke-width="4" ref="progresCircle"  :style="getFunction
-                "/>
+                <circle class="progres_circle" cx="35" cy="35" r="28" stroke-width="4" ref="progresCircle"  :style="getStyle" />              "/>
                 <text x="50%" y="50%" text-anchor="middle" dy=".3em">{{popularity}}<tspan dy="-7" font-size="12px">%</tspan></text>
             </svg>
         </div>
@@ -28,7 +27,7 @@ export default {
         this.circle = this.$refs.progresCircle;
     },
     computed: {
-        getFunction(){
+        getStyle(){
             if (!this.circle) return {};
             const radius = this.circle.r.baseVal.value;
             const circumference = 2 * Math.PI * radius;
@@ -40,11 +39,6 @@ export default {
             }
         },
     },
-    watch: {
-        offset() {
-            this.getColor();
-        }
-    }
 }
 </script>
 
@@ -53,19 +47,12 @@ export default {
     display: flex;
     align-items: center;
     gap: 20px;
-    padding: 10px 0;
 }
 .score_bar{
     width: 70px;
     height: 70px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border-radius: 50%;
     background-color: #081c22;
-    color: #fff;
-    font-weight: bold;
-    text-align: center;
 }
 .progres_circle{
     transform-origin: center;

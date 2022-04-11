@@ -1,41 +1,24 @@
 <template>
   <div class="container">
     <img class="bg_img" :src="backdropImg">
-    <div class="bg_overlay"></div>
-    <div class="main">
-      <div class="poster">
-        <img :src="posterImg" alt="">
-      </div>
-      <div class="content">
-        <div class="main_info">
-          <p class="title">{{movie.title}} <span>({{movie.release_date.substr(0, 4)}})</span></p>
-          <p class="genre"><span v-for="genre in movie.genres" :key="genre.id">{{genre.name+" "}}</span></p>
-        </div>
-        <div class="score">
-          <the-about-score :popularity="movie.vote_average*10" />
-          <p class="tagline">{{movie.tagline}}</p>
-        </div>
-        <div class="description">
-          <p>Обзор</p>
-          <p>{{movie.overview}}</p>
-        </div>
-      </div>
-    </div>
+    <div class="bg_overlay"/>
+    <info-block :movie="movie" :posterImg="posterImg" :releaseDate="releaseDate"/>
   </div>
 </template>
 
 <script>
 import server from '../server.js';
-import TheAboutScore from '../components/TheAboutScore.vue';
+import InfoBlock from '../components/InfoBlock.vue';
 
 export default {
-  components: { TheAboutScore },
+  components: { InfoBlock },
   data() {
     return {
       movieId: this.$route.params.id,
       movie: {},
       posterImg: '',
       backdropImg: '',
+      releaseDate: '',
     }
   },
   created() {
@@ -43,11 +26,9 @@ export default {
       this.movie = data;
       this.posterImg = `https://image.tmdb.org/t/p/w300/${data.poster_path}`;
       this.backdropImg = `https://image.tmdb.org/t/p/w500/${data.backdrop_path}`;
+      this.releaseDate = data.release_date.substr(0, 4);
     })
   },
-  mounted(){
-
-  }
 }
 </script>
 
@@ -72,52 +53,5 @@ export default {
   top: 0;
   left: 0;
   z-index: -1;
-}
-.main{
-  display: flex;
-  width: 70%;
-  margin: auto;
-  margin-top: 225px;
-  gap: 50px;
-}
-.poster{
-  &>img{
-    border-radius: 10px;
-  }
-}
-.content{
-  padding-top: 20px;
-  color: white;
-  font-size: 20px;
-}
-.main_info{
-  &>.title{
-    font-size: 36px;
-    font-weight: bold;
-    line-height: 20px;
-    text-decoration: none;
-    padding: 20px 0;
-    &>span{
-      color: #b8b4b4;
-    }
-  }
-}
-.tagline{
-  color: #b8b4b4;
-  font-style: italic;
-  margin-top: 10px;
-}
-.description{
-  margin-top: 20px;
-  &>p{
-    font-size: 22px;
-    font-weight: bold;
-    line-height: 20px;
-  }
-  &>p:nth-child(2){
-    margin-top: 10px;
-    font-size: 18px;
-    font-weight: normal;
-  }
 }
 </style>
